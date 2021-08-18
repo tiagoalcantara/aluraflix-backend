@@ -10,12 +10,14 @@ public class VideoResponse {
     private final String title;
     private final String description;
     private final String url;
+    private final Long idCategory;
 
     public VideoResponse(Video video){
         this.id = video.getId();
         this.title = video.getTitle();
         this.description = video.getDescription();
         this.url = video.getUrl();
+        this.idCategory = video.getCategory().getId();
     }
 
     public Long getId() {
@@ -32,6 +34,10 @@ public class VideoResponse {
 
     public String getUrl() {
         return url;
+    }
+
+    public Long getIdCategory() {
+        return idCategory;
     }
 
     public static List<VideoResponse> convertVideoListToVideoResponseList(List<Video> videoList){

@@ -1,9 +1,14 @@
 package br.com.tiagoalcantara.aluraflix.videos.dto;
 
+import br.com.tiagoalcantara.aluraflix.categories.model.Category;
+import br.com.tiagoalcantara.aluraflix.categories.repository.CategoryRepository;
+import br.com.tiagoalcantara.aluraflix.shared.validators.annotations.ExistingId;
 import br.com.tiagoalcantara.aluraflix.videos.model.Video;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class CreateVideoRequest {
     @NotBlank
@@ -12,11 +17,14 @@ public class CreateVideoRequest {
     private final String description;
     @NotBlank @URL
     private final String url;
+    @NotNull @Positive @ExistingId(domainClass = Category.class)
+    private final Long idCategory;
 
-    public CreateVideoRequest(String title, String description, String url) {
+    public CreateVideoRequest(String title, String description, String url, Long idCategory) {
         this.title = title;
         this.description = description;
         this.url = url;
+        this.idCategory = idCategory;
     }
 
     public String getTitle() {
@@ -31,7 +39,12 @@ public class CreateVideoRequest {
         return url;
     }
 
-    public Video toModel() {
-        return new Video(this.title, this.description, this.url);
+    public Long getIdCategory() {
+        return idCategory;
+    }
+
+    public Video toModel(CategoryRepository categoryRepository) {
+        Category category = categoryRepository.getById(this.idCategory);
+        return new Video(this.title, this.description, this.url, category);
     }
 }

@@ -1,10 +1,11 @@
 package br.com.tiagoalcantara.aluraflix.categories.model;
 
-import br.com.tiagoalcantara.aluraflix.shared.validators.HexColor;
+import br.com.tiagoalcantara.aluraflix.shared.validators.annotations.HexColor;
+import br.com.tiagoalcantara.aluraflix.videos.model.Video;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -18,8 +19,8 @@ public class Category {
     @Column(nullable = false)
     private String color;
 
-//    @OneToMany(mappedBy = "category")
-//    List<Video> videos;
+    @OneToMany(mappedBy = "category")
+    List<Video> videos;
 
     @Deprecated
     public Category(){}

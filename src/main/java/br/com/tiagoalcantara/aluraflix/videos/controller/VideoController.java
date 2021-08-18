@@ -1,5 +1,6 @@
 package br.com.tiagoalcantara.aluraflix.videos.controller;
 
+import br.com.tiagoalcantara.aluraflix.categories.repository.CategoryRepository;
 import br.com.tiagoalcantara.aluraflix.videos.dto.CreateVideoRequest;
 import br.com.tiagoalcantara.aluraflix.videos.dto.UpdateVideoRequest;
 import br.com.tiagoalcantara.aluraflix.videos.dto.VideoResponse;
@@ -22,10 +23,12 @@ import java.util.List;
 public class VideoController {
 
     private final VideoRepository videoRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public VideoController(VideoRepository videoRepository){
+    public VideoController(VideoRepository videoRepository, CategoryRepository categoryRepository){
         this.videoRepository = videoRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping
@@ -47,7 +50,7 @@ public class VideoController {
     @PostMapping
     @Transactional
     public ResponseEntity<VideoResponse> create(@Valid @RequestBody CreateVideoRequest request, UriComponentsBuilder uriBuilder){
-        Video video = request.toModel();
+        Video video = request.toModel(categoryRepository);
         videoRepository.save(video);
 
         URI createdUri = uriBuilder.path("/videos/{id}").buildAndExpand(video.getId()).toUri();
@@ -61,7 +64,7 @@ public class VideoController {
     public ResponseEntity<VideoResponse> update(@Valid @RequestBody UpdateVideoRequest request, @PathVariable Long id){
         Video video = findByIdOrThrowResponseStatusException(id);
 
-        request.applyUpdate(video);
+        request.applyUpdate(video, categoryRepository);
         VideoResponse response = new VideoResponse(video);
 
         return ResponseEntity.ok(response);

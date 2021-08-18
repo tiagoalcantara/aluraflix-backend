@@ -3,8 +3,11 @@ package br.com.tiagoalcantara.aluraflix.categories.controller;
 import br.com.tiagoalcantara.aluraflix.categories.dto.CategoryResponse;
 import br.com.tiagoalcantara.aluraflix.categories.dto.CreateCategoryRequest;
 import br.com.tiagoalcantara.aluraflix.categories.dto.UpdateCategoryRequest;
+import br.com.tiagoalcantara.aluraflix.categories.dto.VideosByCategoryResponse;
 import br.com.tiagoalcantara.aluraflix.categories.model.Category;
 import br.com.tiagoalcantara.aluraflix.categories.repository.CategoryRepository;
+import br.com.tiagoalcantara.aluraflix.videos.model.Video;
+import br.com.tiagoalcantara.aluraflix.videos.repository.VideoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,11 @@ import java.util.List;
 @RequestMapping("/categorias")
 public class CategoryController {
 
+    private final VideoRepository videoRepository;
     private final CategoryRepository categoryRepository;
 
-    public CategoryController(CategoryRepository categoryRepository) {
+    public CategoryController(VideoRepository videoRepository, CategoryRepository categoryRepository) {
+        this.videoRepository = videoRepository;
         this.categoryRepository = categoryRepository;
     }
 
@@ -40,6 +45,15 @@ public class CategoryController {
         Category category = findByIdOrThrowResponseStatusException(id);
 
         CategoryResponse response = new CategoryResponse(category);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/videos")
+    public ResponseEntity<VideosByCategoryResponse> listVideos(@PathVariable @Positive Long id){
+        Category category = findByIdOrThrowResponseStatusException(id);
+        List<Video> videos = videoRepository.findAllByCategoryId(category.getId());
+
+        VideosByCategoryResponse response = new VideosByCategoryResponse(videos, category);
         return ResponseEntity.ok(response);
     }
 

@@ -1,5 +1,6 @@
 package br.com.tiagoalcantara.aluraflix.builders;
 
+import br.com.tiagoalcantara.aluraflix.categories.model.Category;
 import br.com.tiagoalcantara.aluraflix.videos.model.Video;
 
 public class VideoBuilder {
@@ -26,6 +27,6 @@ public class VideoBuilder {
     }
 
     public Video build(){
-        return new Video(this.title, this.description, this.url);
+        return new Video(this.title, this.description, this.url, null);
     }
 }

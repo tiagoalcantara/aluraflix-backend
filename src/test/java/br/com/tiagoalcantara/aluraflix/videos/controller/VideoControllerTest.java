@@ -86,7 +86,7 @@ class VideoControllerTest {
 
     @Test
     void shouldBeAbleToCreateNewVideo() throws Exception {
-        CreateVideoRequest createVideoRequest = new CreateVideoRequest("Video", "Description", "http://test.com");
+        CreateVideoRequest createVideoRequest = new CreateVideoRequest("Video", "Description", "http://test.com", 1L);
 
         MvcResult mvcResult = mockMvc.perform(post("/videos")
                 .contentType("application/json")
@@ -104,7 +104,7 @@ class VideoControllerTest {
 
     @Test
     void shouldReturnBadRequestWhenCreateVideoRequestIsInvalid() throws Exception {
-        CreateVideoRequest createVideoRequest = new CreateVideoRequest("", null, "aa");
+        CreateVideoRequest createVideoRequest = new CreateVideoRequest("", null, "aa", 1L);
 
         Integer expectedErrorQuantity = 3;
 
@@ -119,7 +119,7 @@ class VideoControllerTest {
     void shouldBeAbleToUpdateVideo() throws Exception{
         VideoBuilder videoBuilder = new VideoBuilder();
         Video video = videoBuilder.build();
-        UpdateVideoRequest updateVideoRequest = new UpdateVideoRequest("New Title", "New Description", "http://newurl.com");
+        UpdateVideoRequest updateVideoRequest = new UpdateVideoRequest("New Title", "New Description", "http://newurl.com", 1L);
         videoRepository.save(video);
 
         MvcResult mvcResult = mockMvc.perform(put("/videos/{id}", video.getId())
@@ -151,7 +151,7 @@ class VideoControllerTest {
         Video video = videoBuilder.build();
         videoRepository.save(video);
 
-        UpdateVideoRequest updateVideoRequest = new UpdateVideoRequest("", "", "aa");
+        UpdateVideoRequest updateVideoRequest = new UpdateVideoRequest("", "", "aa", null);
         Integer expectedErrorQuantity = 3;
 
         mockMvc.perform(put("/videos/{id}", video.getId())

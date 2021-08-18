@@ -1,7 +1,7 @@
 package br.com.tiagoalcantara.aluraflix.categories.dto;
 
 import br.com.tiagoalcantara.aluraflix.categories.model.Category;
-import br.com.tiagoalcantara.aluraflix.shared.validators.HexColor;
+import br.com.tiagoalcantara.aluraflix.shared.validators.annotations.HexColor;
 
 import javax.validation.constraints.NotBlank;
 
