@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findAllByCategoryId(Long categoryId);
+    List<Video> findAllByTitleContaining(String title);
 }

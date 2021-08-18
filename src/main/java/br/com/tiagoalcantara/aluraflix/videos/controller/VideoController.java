@@ -32,8 +32,8 @@ public class VideoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VideoResponse>> list(){
-        List<Video> videoList = videoRepository.findAll();
+    public ResponseEntity<List<VideoResponse>> list(@RequestParam(name = "search", defaultValue = "") String title){
+        List<Video> videoList = videoRepository.findAllByTitleContaining(title);
         List<VideoResponse> response = VideoResponse.convertVideoListToVideoResponseList(videoList);
 
         return ResponseEntity.ok(response);
