@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
@@ -35,9 +36,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> find(@PathVariable Long id){
-        Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria não encontrada"));
+    public ResponseEntity<CategoryResponse> find(@PathVariable @Positive Long id){
+        Category category = findByIdOrThrowResponseStatusException(id);
 
         CategoryResponse response = new CategoryResponse(category);
         return ResponseEntity.ok(response);
@@ -57,9 +57,8 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<CategoryResponse> update(@Valid @RequestBody UpdateCategoryRequest request, @PathVariable Long id){
-        Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria não encontrada"));
+    public ResponseEntity<CategoryResponse> update(@Valid @RequestBody UpdateCategoryRequest request, @PathVariable @Positive Long id){
+        Category category = findByIdOrThrowResponseStatusException(id);
 
         request.applyUpdate(category);
         CategoryResponse response = new CategoryResponse(category);
@@ -67,5 +66,16 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> delete (@PathVariable @Positive Long id) {
+        Category category = findByIdOrThrowResponseStatusException(id);
+        categoryRepository.delete(category);
+        return ResponseEntity.ok().build();
+    }
 
+    private Category findByIdOrThrowResponseStatusException(Long id){
+        return categoryRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria não encontrada"));
+    }
 }

@@ -38,8 +38,7 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VideoResponse> find(@PathVariable Long id){
-        Video video = videoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vídeo não encontrado"));
+        Video video = findByIdOrThrowResponseStatusException(id);
         VideoResponse response = new VideoResponse(video);
 
         return ResponseEntity.ok(response);
@@ -60,8 +59,7 @@ public class VideoController {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<VideoResponse> update(@Valid @RequestBody UpdateVideoRequest request, @PathVariable Long id){
-        Video video = videoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vídeo não encontrado"));
+        Video video = findByIdOrThrowResponseStatusException(id);
 
         request.applyUpdate(video);
         VideoResponse response = new VideoResponse(video);
@@ -72,11 +70,14 @@ public class VideoController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        Video video = videoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vídeo não encontrado"));
-
+        Video video = findByIdOrThrowResponseStatusException(id);
         videoRepository.delete(video);
 
         return ResponseEntity.ok().build();
+    }
+
+    private Video findByIdOrThrowResponseStatusException(Long id) {
+        return videoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vídeo não encontrado"));
     }
 }
