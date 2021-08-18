@@ -1,5 +1,7 @@
 package br.com.tiagoalcantara.aluraflix.categories.model;
 
+import br.com.tiagoalcantara.aluraflix.shared.validators.HexColor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -12,7 +14,7 @@ public class Category {
     @NotBlank
     @Column(nullable = false)
     private String title;
-    @NotBlank @Pattern(regexp = "^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$")
+    @NotBlank @HexColor
     @Column(nullable = false)
     private String color;
 
@@ -37,5 +39,13 @@ public class Category {
 
     public String getColor() {
         return color;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

@@ -63,8 +63,7 @@ public class VideoController {
         Video video = videoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "vídeo não encontrado"));
 
-        video.updateFields(request.getTitle(), request.getDescription(), request.getUrl());
-
+        request.applyUpdate(video);
         VideoResponse response = new VideoResponse(video);
 
         return ResponseEntity.ok(response);

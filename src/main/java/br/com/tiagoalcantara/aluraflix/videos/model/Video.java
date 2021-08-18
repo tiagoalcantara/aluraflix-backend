@@ -40,9 +40,15 @@ public class Video {
         return url;
     }
 
-    public void updateFields(String title, String description, String url){
-        if(title != null) this.title = title;
-        if(description != null) this.description = description;
-        if(url != null) this.url = url;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

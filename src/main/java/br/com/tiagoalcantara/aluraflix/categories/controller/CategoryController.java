@@ -2,6 +2,7 @@ package br.com.tiagoalcantara.aluraflix.categories.controller;
 
 import br.com.tiagoalcantara.aluraflix.categories.dto.CategoryResponse;
 import br.com.tiagoalcantara.aluraflix.categories.dto.CreateCategoryRequest;
+import br.com.tiagoalcantara.aluraflix.categories.dto.UpdateCategoryRequest;
 import br.com.tiagoalcantara.aluraflix.categories.model.Category;
 import br.com.tiagoalcantara.aluraflix.categories.repository.CategoryRepository;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,20 @@ public class CategoryController {
         URI uri = uriBuilder.path("/categorias/{id}").buildAndExpand(category.getId()).toUri();
         CategoryResponse response = new CategoryResponse(category);
 
+        return ResponseEntity.created(uri).body(response);
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<CategoryResponse> update(@Valid @RequestBody UpdateCategoryRequest request, @PathVariable Long id){
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "categoria não encontrada"));
+
+        request.applyUpdate(category);
+        CategoryResponse response = new CategoryResponse(category);
+
         return ResponseEntity.ok(response);
     }
+
+
 }

@@ -1,5 +1,6 @@
 package br.com.tiagoalcantara.aluraflix.videos.dto;
 
+import br.com.tiagoalcantara.aluraflix.videos.model.Video;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Size;
@@ -28,5 +29,11 @@ public class UpdateVideoRequest {
 
     public String getUrl() {
         return url;
+    }
+
+    public void applyUpdate(Video video){
+        if(this.title != null) video.setTitle(this.title);
+        if(this.description != null) video.setDescription(this.description);
+        if(this.url != null) video.setUrl(this.url);
     }
 }
